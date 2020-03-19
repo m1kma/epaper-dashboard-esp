@@ -67,6 +67,7 @@ void drawEpaper(String aws_data)
   const String temp24h = doc["temp24h"];
   const String rhOut = doc["rhOut"];
   const String ws10Out = doc["ws10Out"];
+  const String wg10Out = doc["wg10Out"];
   const String tempIn = doc["tempIn"];
   const String rhIn = doc["rhIn"];
   const String tempTulo = doc["tempTulo"];
@@ -89,31 +90,38 @@ void drawEpaper(String aws_data)
   {
     display.fillScreen(GxEPD_WHITE);
 
-    // Print outside
-    display.setFont(&FreeSansBold18pt7b);
-    display.setCursor(0, 30);
-    display.print("Ulkona");
+    // Print weather outside
+    //display.setFont(&FreeSansBold18pt7b);
+    //display.setCursor(0, 30);
+    //display.print("Ulkona");
 
     display.setFont(&FreeSansBold24pt7b);
 
-    display.setCursor(0, 80);
-    display.print(tempOut);
+    display.setCursor(0, 50);
+    display.print(tempOut + "'C");
 
-    display.setCursor(100, 80);
+    display.setCursor(135, 50);
     display.print(ws10Out + "m/s");
 
+    display.setFont(&FreeSansBold12pt7b);
+    display.setCursor(135, 75);
+    display.print("(" + wg10Out + "m/s)"); // max wind
+
+    display.drawFastHLine(0, 97, 450, 0x0000);
+    display.drawFastHLine(0, 98, 450, 0x0000);
+
     display.setFont(&FreeSansBold18pt7b);
-    display.setCursor(300, 30);
+    display.setCursor(318, 30);
     display.print("6h: " + temp6h);
     display.setCursor(300, 60);
     display.print("12h: " + temp12h);
     display.setCursor(300, 90);
     display.print("24h: " + temp24h);
 
-    // Print inside
+    // Print inside temp
     display.setFont(&FreeSansBold12pt7b);
 
-    display.setCursor(0, 120);
+    display.setCursor(0, 123);
     display.print("Sisa: " + tempIn + "'C / " + rhIn + "%   Tulo: " + tempTulo + "'C / " + rhTulo + "%");
 
     display.drawFastHLine(0, 130, 450, 0x0000);
