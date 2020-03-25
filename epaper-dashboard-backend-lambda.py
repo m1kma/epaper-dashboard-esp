@@ -18,10 +18,12 @@ fbgroupid = os.environ['fbgroupid']
 
 def lambda_handler(event, context):
    
-    fmi_time_delta = datetime.datetime.now() - datetime.timedelta(minutes=65)
+    fmi_time_delta = datetime.datetime.now() - datetime.timedelta(minutes=15)
     fmi_time = fmi_time_delta.replace(microsecond=0).isoformat()
-    fmi_url_observation = 'http://opendata.fmi.fi/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&place=malmi,helsinki&timestep=30&maxlocations=1&starttime={0}&parameters=t2m,rh,ws_10min,wg_10min'.format(fmi_time)
+    fmi_url_observation = 'http://opendata.fmi.fi/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&place=malmi,helsinki&maxlocations=1&starttime={0}&parameters=t2m,rh,ws_10min,wg_10min'.format(fmi_time)
     fmi_url_forecast = 'http://opendata.fmi.fi/wfs?request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&place=malmi,helsinki&timestep=60&maxlocations=1&parameters=temperature'
+
+    print(fmi_url_observation)
 
     responseBody = {
         **fetch_fmi_observation(fmi_url_observation),
@@ -83,12 +85,25 @@ def fetch_fmi_observation(fmi_url_observation):
             if parName.text == 'wg_10min':
                 parWG10Value = member.find('{http://xml.fmi.fi/schema/wfs/2.0}ParameterValue').text
 
-    return {
-        'tempOut':float(parTempValue),
-        'rhOut':round(float(parRhValue)),
-        'ws10Out':float(parWS10Value),
-        'wg10Out':float(parWG10Value)
-    }
+
+    retval = None
+    
+    try:
+        retval = {
+            'tempOut':float(parTempValue),
+            'rhOut':round(float(parRhValue)),
+            'ws10Out':round(float(parWS10Value)),
+            'wg10Out':round(float(parWG10Value))
+        }
+    except Exception:
+        retval = {
+            'tempOut':0,
+            'rhOut':0,
+            'ws10Out':0,
+            'wg10Out':0
+        }
+        
+    return retval
 
 
 def fetch_fmi_forecast(fmi_url_forecast):

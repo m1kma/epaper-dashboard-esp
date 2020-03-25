@@ -98,13 +98,10 @@ void drawEpaper(String aws_data)
     display.setFont(&FreeSansBold24pt7b);
 
     display.setCursor(0, 50);
-    display.print(tempOut + "'C");
+    display.print(tempOut + "'C " + ws10Out + "m/s");
 
-    display.setCursor(135, 50);
-    display.print(ws10Out + "m/s");
-
-    display.setFont(&FreeSansBold12pt7b);
-    display.setCursor(135, 75);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setCursor(135, 85);
     display.print("(" + wg10Out + "m/s)"); // max wind
 
     display.drawFastHLine(0, 97, 450, 0x0000);
@@ -128,7 +125,7 @@ void drawEpaper(String aws_data)
     display.drawFastHLine(0, 131, 450, 0x0000);
 
     // Print RSS
-    display.setFont(&FreeSerifBold18pt7b);
+    display.setFont(&FreeSansBold18pt7b);
 
     display.setCursor(0, 163);
     display.print("- " + rss0 + " -\r\n" + rss1 + "\r\n\r\n" + rss2 + "\r\n\r\n" + rss3 + "\r\n\r\n" + rss4);
