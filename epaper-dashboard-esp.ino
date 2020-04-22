@@ -15,6 +15,7 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
+
 #include <ArduinoJson.h>
 #include "arduino_secrets.h"
 
@@ -24,7 +25,6 @@ const char *ssid_home = SECRET_SSID_HOME;
 const char *password_home = SECRET_PASS_HOME;
 const char *host_dev = SECRET_AWS_HOST_DEV;
 const char *api_key_dev = SECRET_AWS_KEY_DEV;
-const int httpsPort = 443;
 
 void setup()
 {
@@ -33,7 +33,7 @@ void setup()
   delay(100);
   display.init(115200);
 
-  // connect to Wifi
+//  connect to Wifi
   connectWifi();
 
   // make request to the AWS backend service
@@ -45,7 +45,7 @@ void setup()
   Serial.println("setup done");
 
   // go to deep sleep
-  ESP.deepSleep(300e6);
+  ESP.deepSleep(600e6);
 }
 
 void loop()
@@ -90,13 +90,7 @@ void drawEpaper(String aws_data)
   {
     display.fillScreen(GxEPD_WHITE);
 
-    // Print weather outside
-    //display.setFont(&FreeSansBold18pt7b);
-    //display.setCursor(0, 30);
-    //display.print("Ulkona");
-
     display.setFont(&FreeSansBold24pt7b);
-
     display.setCursor(0, 50);
     display.print(tempOut + "'C " + ws10Out + "m/s");
 
@@ -164,6 +158,7 @@ void connectWifi()
   Serial.println(WiFi.localIP());
 }
 
+
 /*
  * Call the AWS endpoint
  */
@@ -174,13 +169,16 @@ String callAWS(const char *host, String api_key)
   Serial.print("connecting to ");
   Serial.println(host);
 
+  client.setInsecure();
+
   // ###### Open HTTP connection #######
-  if (!client.connect(host, httpsPort))
+  if (!client.connect(host, 443))
   {
     Serial.println("connection failed");
-    delay(10000);
     return "";
   }
+
+  client.setTimeout(3000);
 
   String url = "/dev/epaperbff";
 

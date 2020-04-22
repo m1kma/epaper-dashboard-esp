@@ -1,7 +1,10 @@
 # E-paper (e-ink) dashboard project for the ESP8266
-The e-paper dashboard displays current weather and news on the e-ink display. The ESP8266 calls periodically the backend service (AWS Lambda), parses the data and displays the data in the e-paper display. 
+The e-paper dashboard displays current weather and news on the e-ink display. The e-ink display is placed to the flat frame to have a clean end result. The display is drived by the ESP8266 microcontroller. The ESP8266 calls periodically the backend service (AWS Lambda), parses the data and displays the data. 
 
-The backend AWS Lambda collects the data from the various datasources such as the weather service and news RSS feeds. The Lambda returns the data as a JSON string. AWS infra (API Gateway) is deployed manually.
+![alt text](img/epaper-dashboard-1.jpg)
+![alt text](img/epaper-dashboard-2.jpg)
+
+The backend AWS Lambda collects the data from the various datasources such as the weather service and news RSS feeds. The Lambda returns the data as a JSON string.
 
 Example JSON response from the Lambda:
 
@@ -42,6 +45,10 @@ Example JSON response from the Lambda:
 
 ## AWS Python Lambda
 - epaper-dashboard-backend.py
+- The AWS infra (API Gateway) is deployed manually
+
+## IDE
+- Arduino IDE
 
 ## Credits
 Copyright (c) 2020 Mika Mäkelä
